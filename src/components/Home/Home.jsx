@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import "./Home.scss";
 import Banner from "./Banner/Banner";
 import Category from "./Category/Category";
@@ -7,6 +7,7 @@ import { fetchDataFromApi } from "../../utils/api";
 import { Context } from "../../utils/context";
 
 const Home = () => {
+    const [loading, setLoading] = useState(true)
     const { products, setProducts, categories, setCategories } =
         useContext(Context);
     useEffect(() => {
@@ -15,13 +16,16 @@ const Home = () => {
     }, []);
 
     const getProducts = () => {
+        
         fetchDataFromApi("/api/products?populate=*").then((res) => {
             setProducts(res);
+            setLoading(false)
         });
     };
     const getCategories = () => {
         fetchDataFromApi("/api/categories?populate=*").then((res) => {
             setCategories(res);
+            setLoading(false)
         });
     };
 
@@ -34,6 +38,7 @@ const Home = () => {
                    <div id="product"><Products
                         headingText="Popular Products"
                         products={products}
+                        loading={loading}
                     />
                     </div> 
                 </div>
